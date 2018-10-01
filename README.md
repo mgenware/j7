@@ -1,5 +1,5 @@
 # lun [Working in progress]
-Shell scripts in Go
+Shell scripting in Go
 
 ## Installation
 ```sh
