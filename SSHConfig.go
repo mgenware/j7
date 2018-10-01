@@ -32,3 +32,15 @@ func MustNewKeyBasedAuth(keyFile string) []ssh.AuthMethod {
 	}
 	return auth
 }
+
+func NewPwdBasedAuth(pwd string) ([]ssh.AuthMethod, error) {
+	return []ssh.AuthMethod{ssh.Password(pwd)}, nil
+}
+
+func MustNewPwdBasedAuth(pwd string) []ssh.AuthMethod {
+	auth, err := NewPwdBasedAuth(pwd)
+	if err != nil {
+		panic(err)
+	}
+	return auth
+}
