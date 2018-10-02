@@ -3,6 +3,7 @@ package lun
 import (
 	"io/ioutil"
 
+	"github.com/mgenware/lun/lib"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -14,7 +15,7 @@ type SSHConfig struct {
 }
 
 func SafeNewKeyBasedAuth(keyFile string) ([]ssh.AuthMethod, error) {
-	keyBytes, err := ioutil.ReadFile(keyFile)
+	keyBytes, err := ioutil.ReadFile(lib.EvaluatePath(keyFile))
 	if err != nil {
 		return nil, err
 	}
