@@ -1,7 +1,6 @@
 package lun
 
 import (
-	"fmt"
 	"os/exec"
 )
 
@@ -26,12 +25,7 @@ func (node *localNode) Exec(cmd string) []byte {
 
 func (node *localNode) execCore(name string, arg ...string) ([]byte, error) {
 	cmd := exec.Command(name, arg...)
-	output, err := cmd.CombinedOutput()
-
-	if err != nil {
-		return nil, fmt.Errorf("Error running %v\n%v\nOutput: %v", name, err.Error(), string(output))
-	}
-	return output, nil
+	return cmd.CombinedOutput()
 }
 
 // LocalNode is a static instance of internal localNode.
