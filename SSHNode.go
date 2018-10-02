@@ -56,13 +56,21 @@ func MustNewSSHNode(config *SSHConfig) *SSHNode {
 	return node
 }
 
-func (node *SSHNode) Exec(cmd string) ([]byte, error) {
+func (node *SSHNode) SafeExec(cmd string) ([]byte, error) {
 	session, err := node.prepare()
 	if err != nil {
 		return nil, err
 	}
 
 	return session.CombinedOutput(cmd)
+}
+
+func (node *SSHNode) Exec(cmd string) []byte {
+	output, err := node.SafeExec(cmd)
+	if err != nil {
+		panic(err)
+	}
+	return output
 }
 
 func (node *SSHNode) prepare() (*ssh.Session, error) {

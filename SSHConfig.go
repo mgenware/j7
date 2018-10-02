@@ -13,7 +13,7 @@ type SSHConfig struct {
 	Auth []ssh.AuthMethod
 }
 
-func NewKeyBasedAuth(keyFile string) ([]ssh.AuthMethod, error) {
+func SafeNewKeyBasedAuth(keyFile string) ([]ssh.AuthMethod, error) {
 	keyBytes, err := ioutil.ReadFile(keyFile)
 	if err != nil {
 		return nil, err
@@ -25,20 +25,20 @@ func NewKeyBasedAuth(keyFile string) ([]ssh.AuthMethod, error) {
 	return []ssh.AuthMethod{ssh.PublicKeys(signer)}, nil
 }
 
-func MustNewKeyBasedAuth(keyFile string) []ssh.AuthMethod {
-	auth, err := NewKeyBasedAuth(keyFile)
+func NewKeyBasedAuth(keyFile string) []ssh.AuthMethod {
+	auth, err := SafeNewKeyBasedAuth(keyFile)
 	if err != nil {
 		panic(err)
 	}
 	return auth
 }
 
-func NewPwdBasedAuth(pwd string) ([]ssh.AuthMethod, error) {
+func SafeNewPwdBasedAuth(pwd string) ([]ssh.AuthMethod, error) {
 	return []ssh.AuthMethod{ssh.Password(pwd)}, nil
 }
 
-func MustNewPwdBasedAuth(pwd string) []ssh.AuthMethod {
-	auth, err := NewPwdBasedAuth(pwd)
+func NewPwdBasedAuth(pwd string) []ssh.AuthMethod {
+	auth, err := SafeNewPwdBasedAuth(pwd)
 	if err != nil {
 		panic(err)
 	}
