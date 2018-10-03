@@ -1,13 +1,49 @@
 package lun
 
 import (
+	"os"
 	"os/exec"
+	"strings"
+
+	"github.com/mgenware/lun/lib"
+
+	"github.com/mgenware/go-packagex/stringsx"
 )
 
-type localNode struct {
+type LocalNode struct {
+	lastDir string
 }
 
-func (node *localNode) SafeExec(cmd string) ([]byte, error) {
+func NewLocalNode() *LocalNode {
+	return &LocalNode{}
+}
+
+func (node *LocalNode) SafeExec(cmd string) ([]byte, error) {
+	if node.lastDir != "" {
+		output, err := node.execCore("cd", node.lastDir)
+		if err != nil {
+			return output, err
+		}
+	}
+
+	if strings.HasPrefix(cmd, "cd") {
+		var dir string
+		if len(cmd) == 2 {
+			dir = os.Getenv("HOME")
+		} else if cmd[2] == ' ' && len(cmd) > 3 {
+			dir = strings.TrimSpace(stringsx.SubStringFromStart(cmd, 3))
+		}
+
+		if dir != "" {
+			dir = lib.EvaluatePath(dir)
+			err := os.Chdir(dir)
+			if err != nil {
+				return nil, err
+			}
+			node.lastDir = dir
+		}
+	}
+
 	output, err := node.execCore("bash", "-c", cmd)
 	if err != nil {
 		return nil, err
@@ -15,7 +51,7 @@ func (node *localNode) SafeExec(cmd string) ([]byte, error) {
 	return output, nil
 }
 
-func (node *localNode) Exec(cmd string) []byte {
+func (node *LocalNode) Exec(cmd string) []byte {
 	output, err := node.SafeExec(cmd)
 	if err != nil {
 		panic(err)
@@ -23,10 +59,7 @@ func (node *localNode) Exec(cmd string) []byte {
 	return output
 }
 
-func (node *localNode) execCore(name string, arg ...string) ([]byte, error) {
+func (node *LocalNode) execCore(name string, arg ...string) ([]byte, error) {
 	cmd := exec.Command(name, arg...)
 	return cmd.CombinedOutput()
 }
-
-// LocalNode is a static instance of internal localNode.
-var LocalNode = &localNode{}
