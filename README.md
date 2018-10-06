@@ -1,4 +1,4 @@
-# lun [Working in progress]
+# lun
 Shell scripting in Go
 
 ## Installation
