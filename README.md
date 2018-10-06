@@ -16,20 +16,19 @@ import (
 	"os/exec"
 
 	"github.com/mgenware/lun"
-	"github.com/mgenware/lun/runners"
+	"github.com/mgenware/lun/loggers"
 )
 
 func main() {
-	n := lun.NewLocalNode()
-	r := runners.NewConsoleRunner()
+	w := lun.NewNodeWrapper(lun.NewLocalNode(), loggers.NewConsoleLogger())
 
 	_, err := exec.LookPath("tree")
 	if err != nil {
-		fmt.Println("tree is not installed")
-		r.Run(n, "brew install tree")
+		w.Logger().Log(lun.LogLevelError, "tree is not installed")
+		w.Run("brew install tree")
 	}
 	fmt.Println("tree is installed")
-	r.Run(n, "tree .")
+	w.Run("tree .")
 }
 ```
 
@@ -54,28 +53,31 @@ tree is installed
 package main
 
 import (
-	"log"
-
 	"github.com/mgenware/lun"
+	"github.com/mgenware/lun/loggers"
 )
 
 func main() {
 	config := &lun.SSHConfig{
-		Host: "123.4.5.6",
+		Host: "1.2.3.4",
 		User: "root",
-		Auth: lun.MustNewKeyBasedAuth("./key.pem"),
+		Auth: lun.NewKeyBasedAuth("~/key.pem"),
 	}
 
-	node := lun.MustNewSSHNode(config)
-	output, err := node.Exec("pwd")
-	if err != nil {
-		panic(err)
-	}
-	log.Print(string(output))
+	w := lun.NewNodeWrapper(lun.MustNewSSHNode(config), loggers.NewConsoleLogger())
+	w.Run("pwd")
+	w.Run("ls")
 }
+
 ```
 
 Sample output:
 ```
-2018/10/02 01:04:31 /root
+🚗 pwd
+/root
+
+🚗 ls
+bin
+build
+data
 ```

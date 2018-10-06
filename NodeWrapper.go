@@ -9,6 +9,14 @@ func NewNodeWrapper(node Node, logger Logger) *NodeWrapper {
 	return &NodeWrapper{node: node, logger: logger}
 }
 
+func (w *NodeWrapper) Node() Node {
+	return w.node
+}
+
+func (w *NodeWrapper) Logger() Logger {
+	return w.logger
+}
+
 func (w *NodeWrapper) Run(cmd string) {
 	w.run(false, cmd)
 }
