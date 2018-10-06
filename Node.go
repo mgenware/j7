@@ -1,6 +1,6 @@
 package lun
 
 type Node interface {
-	SafeExec(cmd string) ([]byte, error)
-	Exec(cmd string) []byte
+	SafeRun(cmd string) ([]byte, error)
+	Run(cmd string) []byte
 }
