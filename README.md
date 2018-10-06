@@ -81,3 +81,6 @@ bin
 build
 data
 ```
+
+## Windows Support
+Windows is not supported because too many Unix commands are used.
