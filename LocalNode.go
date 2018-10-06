@@ -10,6 +10,7 @@ import (
 	"github.com/mgenware/go-packagex/stringsx"
 )
 
+// LocalNode is used for running commands locally.
 type LocalNode struct {
 	lastDir string
 }
@@ -18,7 +19,7 @@ func NewLocalNode() *LocalNode {
 	return &LocalNode{}
 }
 
-func (node *LocalNode) SafeExec(cmd string) ([]byte, error) {
+func (node *LocalNode) SafeRun(cmd string) ([]byte, error) {
 	if node.lastDir != "" {
 		output, err := node.execCore("cd", node.lastDir)
 		if err != nil {
@@ -51,8 +52,8 @@ func (node *LocalNode) SafeExec(cmd string) ([]byte, error) {
 	return output, nil
 }
 
-func (node *LocalNode) Exec(cmd string) []byte {
-	output, err := node.SafeExec(cmd)
+func (node *LocalNode) Run(cmd string) []byte {
+	output, err := node.SafeRun(cmd)
 	if err != nil {
 		panic(err)
 	}
