@@ -11,6 +11,7 @@ import (
 )
 
 type SSHNode struct {
+	dir        *dirManager
 	config     *SSHConfig
 	sshConfig  *ssh.ClientConfig
 	sshHostKey ssh.PublicKey
@@ -47,6 +48,7 @@ func NewSSHNode(config *SSHConfig) (*SSHNode, error) {
 		config:     config,
 		sshConfig:  sshConfig,
 		sshHostKey: hostKey,
+		dir:        &dirManager{},
 	}, nil
 }
 
@@ -98,6 +100,14 @@ func (node *SSHNode) Run(cmd string) []byte {
 }
 
 func (node *SSHNode) runCore(session *ssh.Session, cmd string) ([]byte, error) {
+	node.dir.Next(cmd, false)
+
+	lastDir := node.dir.LastDir()
+	if lastDir != "" {
+		// TODO: better handling of escaping path
+		cmd = "cd '" + lastDir + "' && " + cmd
+	}
+
 	return session.CombinedOutput(cmd)
 }
 

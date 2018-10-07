@@ -18,7 +18,7 @@ func NewLocalNode() *LocalNode {
 }
 
 func (node *LocalNode) SafeRun(cmd string) ([]byte, error) {
-	dir := node.dir.CDValue(cmd, true)
+	dir := node.dir.Next(cmd, true)
 	if dir != "" {
 		// Unlike SSH session, once we set the working dir to a value, we don't need to reset it on subsequent commands.
 		err := os.Chdir(dir)
