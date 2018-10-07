@@ -1,4 +1,7 @@
 # lun
+
+[![Build Status](https://travis-ci.org/mgenware/lun.svg?branch=master)](http://travis-ci.org/mgenware/lun)
+
 Shell scripting in Go
 
 ## Installation
