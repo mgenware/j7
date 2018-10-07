@@ -11,10 +11,12 @@ import (
 )
 
 type SSHNode struct {
-	config    *SSHConfig
-	sshConfig *ssh.ClientConfig
-
+	config     *SSHConfig
+	sshConfig  *ssh.ClientConfig
 	sshHostKey ssh.PublicKey
+	client     *ssh.Client
+
+	Logger Logger
 }
 
 func NewSSHNode(config *SSHConfig) (*SSHNode, error) {
@@ -57,12 +59,34 @@ func MustNewSSHNode(config *SSHConfig) *SSHNode {
 }
 
 func (node *SSHNode) SafeRun(cmd string) ([]byte, error) {
-	session, err := node.prepare()
+	session, err := node.prepareSession()
+	output, err := node.runCore(session, cmd)
 	if err != nil {
-		return nil, err
-	}
+		if len(output) > 0 {
+			node.log(LogLevelWarning, string(output))
+		}
+		node.log(LogLevelWarning, err.Error())
+		node.log(LogLevelWarning, "Reconnecting...")
 
-	return session.CombinedOutput(cmd)
+		// set the previous client to nil
+		if node.client != nil {
+			err = node.client.Close()
+			if err != nil {
+				node.log(LogLevelWarning, "Error closing previous client: "+err.Error())
+			}
+			node.client = nil
+		}
+		session, err = node.prepareSession()
+		if err != nil {
+			return nil, err
+		}
+
+		output, err = node.runCore(session, cmd)
+		if err != nil {
+			return output, err
+		}
+	}
+	return output, nil
 }
 
 func (node *SSHNode) Run(cmd string) []byte {
@@ -73,18 +97,34 @@ func (node *SSHNode) Run(cmd string) []byte {
 	return output
 }
 
-func (node *SSHNode) prepare() (*ssh.Session, error) {
-	cfg := node.config
-	client, err := ssh.Dial("tcp", fmt.Sprintf("%v:%v", cfg.Host, cfg.Port), node.sshConfig)
-	if err != nil {
-		return nil, err
+func (node *SSHNode) runCore(session *ssh.Session, cmd string) ([]byte, error) {
+	return session.CombinedOutput(cmd)
+}
+
+func (node *SSHNode) prepareSession() (*ssh.Session, error) {
+	if node.client == nil {
+		cfg := node.config
+		addr := fmt.Sprintf("%v:%v", cfg.Host, cfg.Port)
+		node.log(LogLevelInfo, fmt.Sprintf("SSH: Connecting to %v\n", addr))
+
+		client, err := ssh.Dial("tcp", addr, node.sshConfig)
+		if err != nil {
+			return nil, err
+		}
+		node.client = client
 	}
 
-	session, err := client.NewSession()
+	session, err := node.client.NewSession()
 	if err != nil {
 		return nil, err
 	}
 	return session, nil
+}
+
+func (node *SSHNode) log(logLevel int, message string) {
+	if node.Logger != nil {
+		node.Logger.Log(logLevel, message)
+	}
 }
 
 // https://stackoverflow.com/questions/45441735/ssh-handshake-complains-about-missing-host-key

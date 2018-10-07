@@ -15,7 +15,7 @@ type SSHConfig struct {
 }
 
 func SafeNewKeyBasedAuth(keyFile string) ([]ssh.AuthMethod, error) {
-	keyBytes, err := ioutil.ReadFile(lib.EvaluatePath(keyFile))
+	keyBytes, err := ioutil.ReadFile(lib.FormatPath(keyFile, true))
 	if err != nil {
 		return nil, err
 	}
