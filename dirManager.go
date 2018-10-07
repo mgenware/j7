@@ -16,7 +16,7 @@ func (d *dirManager) LastDir() string {
 	return d.lastDir
 }
 
-func (d *dirManager) Next(cmd string, expandLocally bool) string {
+func (d *dirManager) CDValue(cmd string, expandLocally bool) string {
 	if strings.HasPrefix(cmd, "cd") {
 		var dir string
 		if len(cmd) == 2 {

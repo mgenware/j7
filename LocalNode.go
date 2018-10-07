@@ -1,6 +1,7 @@
 package lun
 
 import (
+	"log"
 	"os"
 	"os/exec"
 )
@@ -17,22 +18,16 @@ func NewLocalNode() *LocalNode {
 }
 
 func (node *LocalNode) SafeRun(cmd string) ([]byte, error) {
-	lastDir := node.dir.LastDir()
-	if lastDir != "" {
-		output, err := node.execCore("cd", lastDir)
-		if err != nil {
-			return output, err
-		}
-	}
-
-	dir := node.dir.Next(cmd, true)
+	dir := node.dir.CDValue(cmd, true)
 	if dir != "" {
+		// Unlike SSH session, once we set the working dir to a value, we don't need to reset it on subsequent commands.
 		err := os.Chdir(dir)
 		if err != nil {
 			return nil, err
 		}
 	}
 
+	log.Print("Run ", cmd)
 	output, err := node.execCore("bash", "-c", cmd)
 	if err != nil {
 		return nil, err

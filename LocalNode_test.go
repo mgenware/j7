@@ -41,3 +41,13 @@ func TestLocalRunCD(t *testing.T) {
 	output = localNode.Run("pwd")
 	assert.Equal(t, os.Getenv("HOME")+"\n", string(output))
 }
+
+func TestLocalLastDir(t *testing.T) {
+	tmp := "/"
+	_ = localNode.Run("cd " + tmp)
+	output := localNode.Run("pwd")
+	assert.Equal(t, tmp+"\n", string(output))
+	// Double check if last dir is kept on subsequent commands
+	output = localNode.Run("pwd")
+	assert.Equal(t, tmp+"\n", string(output))
+}
