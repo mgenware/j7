@@ -1,7 +1,6 @@
 package lun
 
 import (
-	"log"
 	"os"
 	"os/exec"
 )
@@ -27,7 +26,6 @@ func (node *LocalNode) SafeRun(cmd string) ([]byte, error) {
 		}
 	}
 
-	log.Print("Run ", cmd)
 	output, err := node.execCore("bash", "-c", cmd)
 	if err != nil {
 		return nil, err
