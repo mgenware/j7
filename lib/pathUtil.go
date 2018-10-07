@@ -9,11 +9,14 @@ import (
 
 const homeEnv = "$HOME"
 
-func EvaluatePath(s string) string {
+func FormatPath(s string, evaluate bool) string {
 	if strings.HasPrefix(s, "~/") {
 		s = homeEnv + "/" + stringsx.SubStringFromStart(s, 2)
 	} else if s == "~" {
 		s = homeEnv
 	}
-	return os.ExpandEnv(s)
+	if evaluate {
+		return os.ExpandEnv(s)
+	}
+	return s
 }
