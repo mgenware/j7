@@ -1,31 +1,31 @@
 package lun
 
-type NodeWrapper struct {
+type Tunnel struct {
 	node   Node
 	logger Logger
 }
 
-func NewNodeWrapper(node Node, logger Logger) *NodeWrapper {
-	return &NodeWrapper{node: node, logger: logger}
+func NewTunnel(node Node, logger Logger) *Tunnel {
+	return &Tunnel{node: node, logger: logger}
 }
 
-func (w *NodeWrapper) Node() Node {
+func (w *Tunnel) Node() Node {
 	return w.node
 }
 
-func (w *NodeWrapper) Logger() Logger {
+func (w *Tunnel) Logger() Logger {
 	return w.logger
 }
 
-func (w *NodeWrapper) Run(cmd string) {
+func (w *Tunnel) Run(cmd string) {
 	w.run(false, cmd)
 }
 
-func (w *NodeWrapper) SafeRun(cmd string) error {
+func (w *Tunnel) SafeRun(cmd string) error {
 	return w.run(true, cmd)
 }
 
-func (w *NodeWrapper) run(ignore bool, cmd string) error {
+func (w *Tunnel) run(ignore bool, cmd string) error {
 	if ignore {
 		w.logger.Log(LogLevelInfo, "🚙 "+cmd)
 	} else {

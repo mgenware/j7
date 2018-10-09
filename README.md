@@ -23,7 +23,7 @@ import (
 )
 
 func main() {
-	w := lun.NewNodeWrapper(lun.NewLocalNode(), loggers.NewConsoleLogger())
+	w := lun.NewTunnel(lun.NewLocalNode(), loggers.NewConsoleLogger())
 
 	_, err := exec.LookPath("tree")
 	if err != nil {
@@ -67,7 +67,7 @@ func main() {
 		Auth: lun.NewKeyBasedAuth("~/key.pem"),
 	}
 
-	w := lun.NewNodeWrapper(lun.NewSSHNode(config), loggers.NewConsoleLogger())
+	w := lun.NewTunnel(lun.NewSSHNode(config), loggers.NewConsoleLogger())
 	w.Run("pwd")
 	w.Run("ls")
 }
