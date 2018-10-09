@@ -20,7 +20,7 @@ type SSHNode struct {
 	Logger Logger
 }
 
-func NewSSHNode(config *SSHConfig) (*SSHNode, error) {
+func SafeNewSSHNode(config *SSHConfig) (*SSHNode, error) {
 	if config.Host == "" {
 		return nil, fmt.Errorf("config.Host cannot be empty")
 	}
@@ -52,8 +52,8 @@ func NewSSHNode(config *SSHConfig) (*SSHNode, error) {
 	}, nil
 }
 
-func MustNewSSHNode(config *SSHConfig) *SSHNode {
-	node, err := NewSSHNode(config)
+func NewSSHNode(config *SSHConfig) *SSHNode {
+	node, err := SafeNewSSHNode(config)
 	if err != nil {
 		panic(err)
 	}

@@ -67,7 +67,7 @@ func main() {
 		Auth: lun.NewKeyBasedAuth("~/key.pem"),
 	}
 
-	w := lun.NewNodeWrapper(lun.MustNewSSHNode(config), loggers.NewConsoleLogger())
+	w := lun.NewNodeWrapper(lun.NewSSHNode(config), loggers.NewConsoleLogger())
 	w.Run("pwd")
 	w.Run("ls")
 }
