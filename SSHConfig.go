@@ -34,6 +34,10 @@ func NewKeyBasedAuth(keyFile string) []ssh.AuthMethod {
 	return auth
 }
 
+func NewDefaultKeyBasedAuth() []ssh.AuthMethod {
+	return NewKeyBasedAuth("~/.ssh/id_rsa")
+}
+
 func SafeNewPwdBasedAuth(pwd string) ([]ssh.AuthMethod, error) {
 	return []ssh.AuthMethod{ssh.Password(pwd)}, nil
 }
