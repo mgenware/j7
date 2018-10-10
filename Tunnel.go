@@ -17,15 +17,19 @@ func (w *Tunnel) Logger() Logger {
 	return w.logger
 }
 
-func (w *Tunnel) Run(cmd string) {
-	w.run(false, cmd)
+func (w *Tunnel) Run(cmd string) []byte {
+	output, err := w.run(false, cmd)
+	if err != nil {
+		panic(err)
+	}
+	return output
 }
 
-func (w *Tunnel) SafeRun(cmd string) error {
+func (w *Tunnel) SafeRun(cmd string) ([]byte, error) {
 	return w.run(true, cmd)
 }
 
-func (w *Tunnel) run(ignore bool, cmd string) error {
+func (w *Tunnel) run(ignore bool, cmd string) ([]byte, error) {
 	if ignore {
 		w.logger.Log(LogLevelInfo, "🚙 "+cmd)
 	} else {
@@ -45,5 +49,5 @@ func (w *Tunnel) run(ignore bool, cmd string) error {
 			w.logger.Log(LogLevelVerbose, string(output))
 		}
 	}
-	return err
+	return output, err
 }
