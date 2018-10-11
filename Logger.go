@@ -1,4 +1,4 @@
-package lun
+package j7
 
 const (
 	LogLevelError   = iota

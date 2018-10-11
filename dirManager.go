@@ -1,11 +1,11 @@
-package lun
+package j7
 
 import (
 	"os"
 	"strings"
 
 	"github.com/mgenware/go-packagex/stringsx"
-	"github.com/mgenware/lun/lib"
+	"github.com/mgenware/j7/lib"
 )
 
 type dirManager struct {

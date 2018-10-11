@@ -1,4 +1,4 @@
-package lun
+package j7
 
 type Tunnel struct {
 	node   Node

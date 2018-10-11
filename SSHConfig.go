@@ -1,9 +1,9 @@
-package lun
+package j7
 
 import (
 	"io/ioutil"
 
-	"github.com/mgenware/lun/lib"
+	"github.com/mgenware/j7/lib"
 	"golang.org/x/crypto/ssh"
 )
 

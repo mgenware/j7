@@ -1,12 +1,12 @@
-# lun
+# j7
 
-[![Build Status](https://travis-ci.org/mgenware/lun.svg?branch=master)](http://travis-ci.org/mgenware/lun)
+[![Build Status](https://travis-ci.org/mgenware/j7.svg?branch=master)](http://travis-ci.org/mgenware/j7)
 
 Shell scripting in Go
 
 ## Installation
 ```sh
-go get github.com/mgenware/lun
+go get github.com/mgenware/j7
 ```
 
 ## Examples
@@ -18,16 +18,16 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/mgenware/lun"
-	"github.com/mgenware/lun/loggers"
+	"github.com/mgenware/j7"
+	"github.com/mgenware/j7/loggers"
 )
 
 func main() {
-	w := lun.NewTunnel(lun.NewLocalNode(), loggers.NewConsoleLogger())
+	w := j7.NewTunnel(j7.NewLocalNode(), loggers.NewConsoleLogger())
 
 	_, err := exec.LookPath("tree")
 	if err != nil {
-		w.Logger().Log(lun.LogLevelError, "tree is not installed")
+		w.Logger().Log(j7.LogLevelError, "tree is not installed")
 		w.Run("brew install tree")
 	}
 	fmt.Println("tree is installed")
@@ -56,18 +56,18 @@ tree is installed
 package main
 
 import (
-	"github.com/mgenware/lun"
-	"github.com/mgenware/lun/loggers"
+	"github.com/mgenware/j7"
+	"github.com/mgenware/j7/loggers"
 )
 
 func main() {
-	config := &lun.SSHConfig{
+	config := &j7.SSHConfig{
 		Host: "1.2.3.4",
 		User: "root",
-		Auth: lun.NewKeyBasedAuth("~/key.pem"),
+		Auth: j7.NewKeyBasedAuth("~/key.pem"),
 	}
 
-	w := lun.NewTunnel(lun.NewSSHNode(config), loggers.NewConsoleLogger())
+	w := j7.NewTunnel(j7.NewSSHNode(config), loggers.NewConsoleLogger())
 	w.Run("pwd")
 	w.Run("ls")
 }
