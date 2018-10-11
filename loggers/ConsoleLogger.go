@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fatih/color"
+	"github.com/mgenware/j7"
 )
 
 type ConsoleLogger struct {
