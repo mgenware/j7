@@ -59,7 +59,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b166c998eb589cd6da3aa24901f328e2d14cfe17cda0957129f880723ee9384b"
+  digest = "1:2464e24610e1cdab712d3955745c0da6d1d26c50d6a7aecf61ebe07e68d2ec4d"
   name = "golang.org/x/crypto"
   packages = [
     "curve25519",
@@ -71,15 +71,15 @@
     "ssh",
   ]
   pruneopts = "UT"
-  revision = "e3636079e1a4c1f337f212cc5cd2aca108f6c900"
+  revision = "a92615f3c49003920a58dedcf32cf55022cefb8d"
 
 [[projects]]
   branch = "master"
-  digest = "1:c2789211d4035eb0843b85958ecf7cb4a5ea91c2d4decee652c94ce898e433cb"
+  digest = "1:0a40b0bdd57a93e741d8557465be3a2edeec408e9b6399586ad65bbe8e355796"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "4497e2df6f9e69048a54498c7affbbec3294ad47"
+  revision = "fa43e7bc11baaae89f3f902b2b4d832b68234844"
 
 [solve-meta]
   analyzer-name = "dep"
