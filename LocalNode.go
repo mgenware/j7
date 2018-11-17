@@ -23,8 +23,11 @@ func (node *LocalNode) RunOrError(cmd string) ([]byte, error) {
 		// Unlike SSH session, once we set the working dir to a value, we don't need to set it on subsequent commands.
 		err := os.Chdir(wd)
 		if err != nil {
-			return []byte("Cannot change working dir to: \"" + wd + "\""), err
+			return []byte("Cannot change working directory to: \"" + wd + "\""), err
 		}
+
+		// Running bash -c with a cd commands with relative paths cause issues, so we stop here
+		return nil, nil
 	}
 
 	output, err := node.execCore("bash", "-c", cmd)
