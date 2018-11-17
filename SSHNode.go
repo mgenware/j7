@@ -60,7 +60,7 @@ func NewSSHNode(config *SSHConfig) *SSHNode {
 	return node
 }
 
-func (node *SSHNode) Run(cmd string) ([]byte, error) {
+func (node *SSHNode) RunOrError(cmd string) ([]byte, error) {
 	session, err := node.prepareSession()
 	output, err := node.runCore(session, cmd)
 	if err != nil {

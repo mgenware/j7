@@ -35,7 +35,7 @@ func (w *Tunnel) run(ignore bool, cmd string) ([]byte, error) {
 	} else {
 		w.logger.Log(LogLevelInfo, "🚗 "+cmd)
 	}
-	output, err := w.node.Run(cmd)
+	output, err := w.node.RunOrError(cmd)
 	if err != nil {
 		if len(output) > 0 {
 			w.logger.Log(LogLevelError, string(output))
