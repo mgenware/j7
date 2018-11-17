@@ -17,7 +17,7 @@ func (w *Tunnel) Logger() Logger {
 	return w.logger
 }
 
-func (w *Tunnel) MustRun(cmd string) []byte {
+func (w *Tunnel) Run(cmd string) []byte {
 	output, err := w.run(false, cmd)
 	if err != nil {
 		panic(err)
@@ -25,7 +25,7 @@ func (w *Tunnel) MustRun(cmd string) []byte {
 	return output
 }
 
-func (w *Tunnel) Run(cmd string) ([]byte, error) {
+func (w *Tunnel) RunOrError(cmd string) ([]byte, error) {
 	return w.run(true, cmd)
 }
 

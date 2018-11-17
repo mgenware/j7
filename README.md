@@ -67,11 +67,10 @@ func main() {
 		Auth: j7.NewKeyBasedAuth("~/key.pem"),
 	}
 
-	w := j7.NewTunnel(j7.NewSSHNode(config), loggers.NewConsoleLogger())
-	w.Run("pwd")
-	w.Run("ls")
+	t := j7.NewTunnel(j7.NewSSHNode(config), loggers.NewConsoleLogger())
+	t.Run("pwd")
+	t.Run("ls")
 }
-
 ```
 
 Sample output:
