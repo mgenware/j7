@@ -17,7 +17,7 @@ func (w *Tunnel) Logger() Logger {
 	return w.logger
 }
 
-func (w *Tunnel) Run(cmd string) []byte {
+func (w *Tunnel) MustRun(cmd string) []byte {
 	output, err := w.run(false, cmd)
 	if err != nil {
 		panic(err)
@@ -25,7 +25,7 @@ func (w *Tunnel) Run(cmd string) []byte {
 	return output
 }
 
-func (w *Tunnel) SafeRun(cmd string) ([]byte, error) {
+func (w *Tunnel) Run(cmd string) ([]byte, error) {
 	return w.run(true, cmd)
 }
 
@@ -35,7 +35,7 @@ func (w *Tunnel) run(ignore bool, cmd string) ([]byte, error) {
 	} else {
 		w.logger.Log(LogLevelInfo, "🚗 "+cmd)
 	}
-	output, err := w.node.SafeRun(cmd)
+	output, err := w.node.Run(cmd)
 	if err != nil {
 		if len(output) > 0 {
 			w.logger.Log(LogLevelError, string(output))

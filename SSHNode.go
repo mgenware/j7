@@ -60,7 +60,7 @@ func NewSSHNode(config *SSHConfig) *SSHNode {
 	return node
 }
 
-func (node *SSHNode) SafeRun(cmd string) ([]byte, error) {
+func (node *SSHNode) Run(cmd string) ([]byte, error) {
 	session, err := node.prepareSession()
 	output, err := node.runCore(session, cmd)
 	if err != nil {
@@ -91,16 +91,8 @@ func (node *SSHNode) SafeRun(cmd string) ([]byte, error) {
 	return output, nil
 }
 
-func (node *SSHNode) Run(cmd string) []byte {
-	output, err := node.SafeRun(cmd)
-	if err != nil {
-		panic(err)
-	}
-	return output
-}
-
 func (node *SSHNode) runCore(session *ssh.Session, cmd string) ([]byte, error) {
-	node.dir.Next(cmd, false)
+	node.dir.NextWD(cmd, false)
 
 	lastDir := node.dir.LastDir()
 	if lastDir != "" {

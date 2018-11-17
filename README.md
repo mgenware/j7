@@ -10,7 +10,7 @@ go get github.com/mgenware/j7
 ```
 
 ## Examples
-Checking if a command is installed and performing an install command if necessary. (assume macOS with homebrew installed)
+Checking if a command is installed and performing an install command if necessary. (assuming macOS with homebrew installed)
 ```go
 package main
 
@@ -23,15 +23,15 @@ import (
 )
 
 func main() {
-	w := j7.NewTunnel(j7.NewLocalNode(), loggers.NewConsoleLogger())
+	t := j7.NewTunnel(j7.NewLocalNode(), loggers.NewConsoleLogger())
 
 	_, err := exec.LookPath("tree")
 	if err != nil {
-		w.Logger().Log(j7.LogLevelError, "tree is not installed")
-		w.Run("brew install tree")
+		t.Logger().Log(j7.LogLevelError, "tree is not installed")
+		t.Run("brew install tree")
 	}
 	fmt.Println("tree is installed")
-	w.Run("tree .")
+	t.Run("tree .")
 }
 ```
 

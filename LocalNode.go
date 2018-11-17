@@ -16,11 +16,12 @@ func NewLocalNode() *LocalNode {
 	}
 }
 
-func (node *LocalNode) SafeRun(cmd string) ([]byte, error) {
-	dir := node.dir.Next(cmd, true)
-	if dir != "" {
-		// Unlike SSH session, once we set the working dir to a value, we don't need to reset it on subsequent commands.
-		err := os.Chdir(dir)
+func (node *LocalNode) Run(cmd string) ([]byte, error) {
+	// Get the next working dir to be set
+	wd := node.dir.NextWD(cmd, true)
+	if wd != "" {
+		// Unlike SSH session, once we set the working dir to a value, we don't need to set it on subsequent commands.
+		err := os.Chdir(wd)
 		if err != nil {
 			return nil, err
 		}
@@ -31,14 +32,6 @@ func (node *LocalNode) SafeRun(cmd string) ([]byte, error) {
 		return nil, err
 	}
 	return output, nil
-}
-
-func (node *LocalNode) Run(cmd string) []byte {
-	output, err := node.SafeRun(cmd)
-	if err != nil {
-		panic(err)
-	}
-	return output
 }
 
 func (node *LocalNode) execCore(name string, arg ...string) ([]byte, error) {
